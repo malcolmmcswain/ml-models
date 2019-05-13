@@ -1,21 +1,26 @@
 import React from 'react'
+import styles from '../styles/styles'
 
 class Home extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      size: 1,
-      activation: 'none',
+      size: '1',
+      activation: 'softmax',
       bias: false,
       layers: [],
+      batchSize: '1',
+      epochs: '1',
     };
 
+    this.run = this.run.bind(this);
     this.handleSizeChange = this.handleSizeChange.bind(this);
     this.handleActivationChange = this.handleActivationChange.bind(this);
     this.handleBiasChange = this.handleBiasChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.run = this.run.bind(this);
+    this.handleBatchSizeChange = this.handleBatchSizeChange.bind(this);
+    this.handleEpochsChange = this.handleEpochsChange.bind(this);
   }
 
   async getData() {
@@ -96,8 +101,8 @@ class Home extends React.Component {
       metrics: ['mse'],
     });
 
-    const batchSize = 28;
-    const epochs = 100;
+    const batchSize = parseInt(this.state.batchSize);
+    const epochs = parseInt(this.state.epochs);
 
     return await model.fit(inputs, labels, {
       batchSize,
@@ -179,10 +184,6 @@ class Home extends React.Component {
     this.testModel(model, data, tensorData);
   }
 
-  /*componentDidMount() {
-    this.run();
-  }*/
-
   handleSizeChange(event) {
     this.setState({size: event.target.value});
   }
@@ -193,6 +194,14 @@ class Home extends React.Component {
 
   handleBiasChange(event) {
     this.setState({bias: event.target.value});
+  }
+
+  handleBatchSizeChange(event) {
+    this.setState({batchSize: event.target.value});
+  }
+
+  handleEpochsChange(event) {
+    this.setState({epochs: event.target.value});
   }
 
   handleSubmit(event) {
@@ -207,23 +216,16 @@ class Home extends React.Component {
     event.preventDefault();
   }
 
-  /*renderPreview() {
-    return(
-      this.state
-    )
-  }*/
-
   render() {
     return (
       <div>
 
-        <h1 style={{fontFamily: 'Helvetica'}}>MATH 270 Honors Project Demo</h1>
-        <h2>Design a neural network</h2>
+        <h1 style={styles.text}>MATH 270 Honors Project Demo</h1>
+        <h3 style={styles.text}>Dense Layer Generator:</h3>
 
-        <form onSubmit={this.handleSubmit}>
-          <h3>Dense Layer Generator</h3>
+        <form onSubmit={this.handleSubmit} style={styles.text}>
           <label>
-            <span style={{fontWeight: 'bold'}}>Size:{' '}</span>
+            <span style={styles.bold}>Size:{' '}</span>
             <input
               type="number"
               name="units"
@@ -233,20 +235,21 @@ class Home extends React.Component {
               max="100"
             />
           </label>
-          <label style={{marginLeft: 20}}>
-            <span style={{fontWeight: 'bold'}}>Activation:{' '}</span>
+          <label style={styles.label}>
+            <span style={styles.bold}>Activation:{' '}</span>
             <select
               name="activation"
               value={this.state.activation}
               onChange={this.handleActivationChange}
             >
-              <option value="none">None</option>
-              <option value="sigmoid">Sigmoid</option>
-              <option value="relu">ReLu</option>
+              <option value="softmax">Normalized Exponential</option>
+              <option value="sigmoid">Sigmoid Function</option>
+              <option value="relu">Rectified Linear Unit</option>
+              <option value="tanh">Hyperbolic Tangent</option>
             </select>
           </label>
-          <label style={{marginLeft: 20}}>
-            <span style={{fontWeight: 'bold'}}>Bias:{' '}</span>
+          <label style={styles.label}>
+            <span style={styles.bold}>Bias:{' '}</span>
             <input
               type="radio"
               value="true"
@@ -260,50 +263,71 @@ class Home extends React.Component {
               onChange={this.handleBiasChange}
             />False
           </label>
-          <input style={{marginLeft: 20}} type="submit" value="Add Layer" />
+          <input style={styles.label} type="submit" value="Add Layer" />
         </form>
 
-        <h3>Preview:</h3>
+        <h3 style={styles.text}>Preview:</h3>
 
-        {/*<div style={{width: '500px', display: 'flex', flexDirection: 'row', padding: '25px'}}>
-          <div style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>Size</div>
-          <div style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>Activation</div>
-          <div style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>Bias</div>
-        </div>*/}
-
-        <div style={{width: '750px', display: 'flex', flexDirection: 'row'}}>
-          <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
-            <div style={{flex: 0.7, textAlign: 'center', backgroundColor: '#ffcccc', borderRadius: '15px', padding: '100px 0'}}>
+        <div style={styles.previewContainer}>
+          <div style={styles.column}>
+            <div style={styles.inputColumn}>
               input<br />
               1<br />
               none<br />
               false<br />
             </div>
-            <div style={{flex: 0.3, textAlign: 'center', marginTop: '125px'}}>→</div>
+            <div style={styles.arrow}>→</div>
           </div>
           {this.state.layers.map((layer) => (
-              <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
-                <div style={{flex: 0.7, textAlign: 'center', backgroundColor: '#ffffcc', borderRadius: '15px', padding: '100px 0'}}>
+              <div style={styles.column}>
+                <div style={styles.layerColumn}>
                   layer<br />
                   {layer.size}<br />
                   {layer.activation}<br />
                   {layer.bias}<br />
                 </div>
-                <div style={{flex: 0.3, textAlign: 'center', marginTop: '125px'}}>→</div>
+                <div style={styles.arrow}>→</div>
               </div>
           ))}
-          <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
-            <div style={{flex: 0.7, textAlign: 'center', backgroundColor: '#ccffcc', borderRadius: '15px', padding: '100px 0'}}>
+          <div style={styles.column}>
+            <div style={styles.outputColumn}>
               output<br />
               1<br />
               none<br />
               true<br />
             </div>
-            <div style={{flex: 0.3, textAlign: 'center'}}/>
+            <div style={styles.arrow}/>
           </div>
         </div>
 
-        <button style={{marginTop: '25px'}} onClick={this.run}>
+        <h3 style={styles.text}>Training Parameters:</h3>
+
+        <form style={styles.text}>
+          <label>
+            Batch Size:{' '}
+            <input
+              type="number"
+              name="batch"
+              value={this.state.batchSize}
+              onChange={this.handleBatchSizeChange}
+              min="1"
+              max="100"
+            />
+          </label>
+          <label style={styles.label}>
+            Epochs:{' '}
+            <input
+              type="number"
+              name="units"
+              value={this.state.epochs}
+              onChange={this.handleEpochsChange}
+              min="1"
+              max="500"
+            />
+          </label>
+        </form>
+
+        <button style={styles.button} onClick={this.run}>
           Compile, train, and test model
         </button>
 

@@ -709,6 +709,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _styles_styles__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../styles/styles */ "./styles/styles.js");
 
 
 
@@ -724,6 +725,7 @@ __webpack_require__.r(__webpack_exports__);
 var _jsxFileName = "/Users/malcolmmcswain/Desktop/honors/ml-models/pages/index.js";
 
 
+
 var Home =
 /*#__PURE__*/
 function (_React$Component) {
@@ -736,16 +738,20 @@ function (_React$Component) {
 
     _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_8__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_9__["default"])(Home).call(this, props));
     _this.state = {
-      size: 1,
-      activation: 'none',
+      size: '1',
+      activation: 'softmax',
       bias: false,
-      layers: []
+      layers: [],
+      batchSize: '1',
+      epochs: '1'
     };
+    _this.run = _this.run.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
     _this.handleSizeChange = _this.handleSizeChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
     _this.handleActivationChange = _this.handleActivationChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
     _this.handleBiasChange = _this.handleBiasChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
     _this.handleSubmit = _this.handleSubmit.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
-    _this.run = _this.run.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
+    _this.handleBatchSizeChange = _this.handleBatchSizeChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
+    _this.handleEpochsChange = _this.handleEpochsChange.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_10__["default"])(_this));
     return _this;
   }
 
@@ -876,8 +882,8 @@ function (_React$Component) {
                   loss: tf.losses.meanSquaredError,
                   metrics: ['mse']
                 });
-                batchSize = 28;
-                epochs = 100;
+                batchSize = _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(this.state.batchSize);
+                epochs = _babel_runtime_corejs2_core_js_parse_int__WEBPACK_IMPORTED_MODULE_3___default()(this.state.epochs);
                 _context2.next = 5;
                 return model.fit(inputs, labels, {
                   batchSize: batchSize,
@@ -899,7 +905,7 @@ function (_React$Component) {
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, this);
       }));
 
       function trainModel(_x, _x2, _x3) {
@@ -1013,10 +1019,6 @@ function (_React$Component) {
 
       return run;
     }()
-    /*componentDidMount() {
-      this.run();
-    }*/
-
   }, {
     key: "handleSizeChange",
     value: function handleSizeChange(event) {
@@ -1039,6 +1041,20 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "handleBatchSizeChange",
+    value: function handleBatchSizeChange(event) {
+      this.setState({
+        batchSize: event.target.value
+      });
+    }
+  }, {
+    key: "handleEpochsChange",
+    value: function handleEpochsChange(event) {
+      this.setState({
+        epochs: event.target.value
+      });
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(event) {
       var _this2 = this;
@@ -1055,62 +1071,48 @@ function (_React$Component) {
       });
       event.preventDefault();
     }
-    /*renderPreview() {
-      return(
-        this.state
-      )
-    }*/
-
   }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 218
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h1", {
-        style: {
-          fontFamily: 'Helvetica'
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 220
-        },
-        __self: this
-      }, "MATH 270 Honors Project Demo"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h2", {
-        __source: {
-          fileName: _jsxFileName,
           lineNumber: 221
         },
         __self: this
-      }, "Design a neural network"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("form", {
-        onSubmit: this.handleSubmit,
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h1", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 223
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h3", {
+      }, "MATH 270 Honors Project Demo"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h3", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 224
         },
         __self: this
-      }, "Dense Layer Generator"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 225
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("span", {
-        style: {
-          fontWeight: 'bold'
-        },
+      }, "Dense Layer Generator:"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("form", {
+        onSubmit: this.handleSubmit,
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 226
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 227
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("span", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].bold,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 228
         },
         __self: this
       }, "Size:", ' '), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
@@ -1122,25 +1124,21 @@ function (_React$Component) {
         max: "100",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 227
+          lineNumber: 229
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
-        style: {
-          marginLeft: 20
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].label,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 236
+          lineNumber: 238
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("span", {
-        style: {
-          fontWeight: 'bold'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].bold,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 237
+          lineNumber: 239
         },
         __self: this
       }, "Activation:", ' '), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("select", {
@@ -1149,46 +1147,49 @@ function (_React$Component) {
         onChange: this.handleActivationChange,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 238
+          lineNumber: 240
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
-        value: "none",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 243
-        },
-        __self: this
-      }, "None"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
-        value: "sigmoid",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 244
-        },
-        __self: this
-      }, "Sigmoid"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
-        value: "relu",
+        value: "softmax",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 245
         },
         __self: this
-      }, "ReLu"))), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
-        style: {
-          marginLeft: 20
+      }, "Normalized Exponential"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
+        value: "sigmoid",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 246
         },
+        __self: this
+      }, "Sigmoid Function"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
+        value: "relu",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 247
+        },
+        __self: this
+      }, "Rectified Linear Unit"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("option", {
+        value: "tanh",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 248
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("span", {
-        style: {
-          fontWeight: 'bold'
-        },
+      }, "Hyperbolic Tangent"))), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].label,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 249
+          lineNumber: 251
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("span", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].bold,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 252
         },
         __self: this
       }, "Bias:", ' '), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
@@ -1198,7 +1199,7 @@ function (_React$Component) {
         onChange: this.handleBiasChange,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 250
+          lineNumber: 253
         },
         __self: this
       }), "True", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
@@ -1208,237 +1209,240 @@ function (_React$Component) {
         onChange: this.handleBiasChange,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 256
+          lineNumber: 259
         },
         __self: this
       }), "False"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
-        style: {
-          marginLeft: 20
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].label,
         type: "submit",
         value: "Add Layer",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 263
-        },
-        __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h3", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 266
         },
         __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h3", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 269
+        },
+        __self: this
       }, "Preview:"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          width: '750px',
-          display: 'flex',
-          flexDirection: 'row'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].previewContainer,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 274
+          lineNumber: 271
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'row'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].column,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 275
+          lineNumber: 272
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 0.7,
-          textAlign: 'center',
-          backgroundColor: '#ffcccc',
-          borderRadius: '15px',
-          padding: '100px 0'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].inputColumn,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 276
+          lineNumber: 273
         },
         __self: this
       }, "input", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 277
+          lineNumber: 274
         },
         __self: this
       }), "1", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 278
+          lineNumber: 275
         },
         __self: this
       }), "none", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 279
+          lineNumber: 276
         },
         __self: this
       }), "false", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 280
+          lineNumber: 277
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 0.3,
-          textAlign: 'center',
-          marginTop: '125px'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].arrow,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 282
+          lineNumber: 279
         },
         __self: this
       }, "\u2192")), this.state.layers.map(function (layer) {
         return react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-          style: {
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'row'
-          },
+          style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].column,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 285
+            lineNumber: 282
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-          style: {
-            flex: 0.7,
-            textAlign: 'center',
-            backgroundColor: '#ffffcc',
-            borderRadius: '15px',
-            padding: '100px 0'
-          },
+          style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].layerColumn,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 286
+            lineNumber: 283
           },
           __self: this
         }, "layer", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 287
+            lineNumber: 284
           },
           __self: this
         }), layer.size, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 288
+            lineNumber: 285
           },
           __self: this
         }), layer.activation, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 289
+            lineNumber: 286
           },
           __self: this
         }), layer.bias, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 290
+            lineNumber: 287
           },
           __self: this
         })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-          style: {
-            flex: 0.3,
-            textAlign: 'center',
-            marginTop: '125px'
-          },
+          style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].arrow,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 292
+            lineNumber: 289
           },
           __self: this
         }, "\u2192"));
       }), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'row'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].column,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 295
+          lineNumber: 292
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 0.7,
-          textAlign: 'center',
-          backgroundColor: '#ccffcc',
-          borderRadius: '15px',
-          padding: '100px 0'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].outputColumn,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 296
+          lineNumber: 293
         },
         __self: this
       }, "output", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 297
+          lineNumber: 294
         },
         __self: this
       }), "1", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 298
+          lineNumber: 295
         },
         __self: this
       }), "none", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 299
+          lineNumber: 296
         },
         __self: this
       }), "true", react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 300
+          lineNumber: 297
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("div", {
-        style: {
-          flex: 0.3,
-          textAlign: 'center'
-        },
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].arrow,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 302
+          lineNumber: 299
         },
         __self: this
-      }))), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("button", {
-        style: {
-          marginTop: '25px'
+      }))), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("h3", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 303
         },
-        onClick: this.run,
+        __self: this
+      }, "Training Parameters:"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("form", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].text,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 305
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 306
+        },
+        __self: this
+      }, "Batch Size:", ' ', react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
+        type: "number",
+        name: "batch",
+        value: this.state.batchSize,
+        onChange: this.handleBatchSizeChange,
+        min: "1",
+        max: "100",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 308
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("label", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].label,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 317
+        },
+        __self: this
+      }, "Epochs:", ' ', react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("input", {
+        type: "number",
+        name: "units",
+        value: this.state.epochs,
+        onChange: this.handleEpochsChange,
+        min: "1",
+        max: "500",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 319
+        },
+        __self: this
+      }))), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("button", {
+        style: _styles_styles__WEBPACK_IMPORTED_MODULE_13__["default"].button,
+        onClick: this.run,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 330
         },
         __self: this
       }, "Compile, train, and test model"), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("script", {
         src: "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 310
+          lineNumber: 334
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_12___default.a.createElement("script", {
         src: "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 311
+          lineNumber: 335
         },
         __self: this
       }));
@@ -1449,6 +1453,69 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_12___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Home);
+
+/***/ }),
+
+/***/ "./styles/styles.js":
+/*!**************************!*\
+  !*** ./styles/styles.js ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var styles = {
+  text: {
+    fontFamily: 'Helvetica'
+  },
+  previewContainer: {
+    width: '750px',
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  column: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  inputColumn: {
+    flex: 0.7,
+    textAlign: 'center',
+    backgroundColor: '#ffcccc',
+    borderRadius: '15px',
+    padding: '100px 0'
+  },
+  layerColumn: {
+    flex: 0.7,
+    textAlign: 'center',
+    backgroundColor: '#ffffcc',
+    borderRadius: '15px',
+    padding: '100px 0'
+  },
+  outputColumn: {
+    flex: 0.7,
+    textAlign: 'center',
+    backgroundColor: '#ccffcc',
+    borderRadius: '15px',
+    padding: '100px 0'
+  },
+  arrow: {
+    flex: 0.3,
+    textAlign: 'center',
+    marginTop: '125px'
+  },
+  label: {
+    marginLeft: '20px'
+  },
+  button: {
+    marginTop: '25px'
+  },
+  bold: {
+    fontWeight: 'bold'
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (styles);
 
 /***/ }),
 
