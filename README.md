@@ -1,7 +1,7 @@
 # Math 270 Honors Project
 **Authored by Malcolm McSwain**
 
-The demo for this project is hosted at http://math-270-honors-project.appspot.com/
+The demo for this project is hosted at https://math-270-honors-project.malcolmmcswain.now.sh/
 
 The goal of this project is to provide a relatively simple but comprehensive understanding of the mathematics, with a foundation in linear algebra and multivariable calculus, and computation, handled by the TensorFlow Layers API, required for designing, compiling, training, and testing neural networks.
 
@@ -42,8 +42,81 @@ Ultimately, what we need to find is *how the cost function responds to changes i
 
 We begin by defining δ^L_j as the error of an individual node j in layer L. Then:
 
-<img src="images/5.png" width="400"><br />
+<img src="images/5.png" height="100"><br />
 
-Breaking this equation down, we compute the partial derivative of the cost function with respect to the activation of a node j in layer L and multiply it with the derivative of the sigmoid activation function applied to z, which represents the neuron input, or the weighted sum of the previous layer. (think z = wx + b)
+Breaking this equation down, we compute the partial derivative of the cost function with respect to the activation (∂C/∂a) of a node j in layer L and multiply it with the derivative of the sigmoid activation function applied to z, which represents the neuron input, or the weighted sum of the previous layer. (think z = wx + b)
 
 Rewriting in matrix form, we get:
+
+<img src="images/6.png" height="50"><br />
+
+This is the *Hadamard product* (⊙ = elementwise multiplication) of ∇\_aC, the vector of ∂C/∂a's for each neuron in the layer, and the vector of differentiated activations applied to the layer inputs.
+
+For each consecutive layer, moving *backwards*, we have the error for l defined recursively in terms of the next layer (l + 1) as:
+
+<img src="images/7.png" height="50"><br />
+
+which replaces the the vector of ∂C/∂a's for each neuron in the layer with the transpose of the weights vector of the next layer multiplied by the error of that layer.
+
+This is important for our algorithm because, through this definition, we can calculate the error recursively, propagating backwards through the neural network, giving rise to the name **backpropagation**.
+
+Once we have the error, we can calculate the gradients for the biases and weights respectively with:
+
+<img src="images/8.png" height="70">, <img src="images/9.png" height="70"><br />
+
+Finally, we adjust the weights and biases by subtracting the normalized gradients. This loss optimization technique is called **stochastic gradient descent**. Conceptually, the gradient vector points in the direction of greatest increase of a function. Thus, we step in the *opposite* direction, and re-calculate the gradient here, stepping backwards again, repeating this process until it flattens out, signifying we have optimized C.
+
+In practice, large datasets containing a set of inputs and corresponding expected outputs are split up into **batches** and fed through the algorithm one batch at a time. Once all batches have passed through, the process is repeated for a desired number of **epochs**.
+
+After the training is complete, new values can be tested by feeding them into the model and observing the output produced by the new weights and biases.
+
+Read more on backpropagation and stochastic gradient descent: http://neuralnetworksanddeeplearning.com/chap2.html
+
+## Implementation using TensorFlow.js
+
+For this project, I wanted to build an application that would allow users to experiment with different neural network structures and see how it affects the compilation, optimization, shape, and performance of their model.
+
+### Tech stack
+
+I decided to use **TensorFlow.js**, a high-level API (initially created by Google) that takes care of all the low-level computation involved with machine learning. Additionally, TensorFlow.js will run in the browser efficiently thanks to the WebGL-enabled use of the GPU, a computational engine designed for handling large matrices and vectors. (typically in the use case of rendering graphics) This would also allow me to provide an interactive user interface written in **React**. (a robust framework for delivering user interfaces in JavaScript by Facebook) Finally, I used **Next.js** (deployed via ZEIT Now) to bootstrap and build Node, TensorFlow, and React on the backend.
+
+### What is a tensor?
+
+To understand TensorFlow, you must first understand a tensor as an abstract mathematical object. Simply put, a tensor is just a generalization of scalars and vectors.
+
+A tensor can be a number: `1` (rank 0, shape 0)
+
+...or a vector: `[1,2,3]` (rank 1, shape 3)
+
+...or a vector of vectors: `[[1,2,3],[4,5,6],[7,8,9]]` (rank 2, shape (3,3))
+
+... or a vector of vectors of vectors:
+
+`[[[1,2],[3,4]],[[5,6],[7,8]]]` (rank 3, shape  (2,2,2))
+
+...and so on.
+
+Tensors are the fundamental mutable objects handled by the TensorFlow API, and must be used to feed through models. They are defined by their shape.
+
+### Getting the data
+
+For this example, I used this sample data provided by Google: https://storage.googleapis.com/tfjs-tutorials/carsData.json
+
+```js
+async getData() {
+  const carsDataReq = await fetch('https://storage.googleapis.com/tfjs-tutorials/carsData.json');
+  const carsData = await carsDataReq.json();
+  const cleaned = carsData.map(car => ({
+    mpg: car.Miles_per_Gallon,
+    horsepower: car.Horsepower,
+  })).filter(car => (car.mpg != null && car.horsepower != null));
+
+  return cleaned;
+}
+```
+
+This asynchronuous function requests the data via fetch(), an API for making HTTP GET requests, converts it to JSON, or JavaScript Object Notation, and gets rid of all the extraneous data.
+
+```js
+
+```
