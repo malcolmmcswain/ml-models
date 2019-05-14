@@ -117,6 +117,112 @@ async getData() {
 
 This asynchronuous function requests the data via fetch(), an API for making HTTP GET requests, converts it to JSON, or JavaScript Object Notation, and gets rid of all the extraneous data.
 
-```js
+### Converting to tensors
 
+Next, we need to shuffle and normalize the data, then put the inputs (or xs) and labels (or ys) into tensors.
+
+```js
+convertToTensor(data) {
+  return tf.tidy(() => {
+    tf.util.shuffle(data);
+
+    const inputs = data.map(d => d.horsepower);
+    const labels = data.map(d => d.mpg);
+
+    const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
+    const labelTensor = tf.tensor2d(labels, [labels.length, 1]);
+
+    const inputMax = inputTensor.max();
+    const inputMin = inputTensor.min();
+    const labelMax = labelTensor.max();
+    const labelMin = labelTensor.min();
+
+    const normalizedInputs = inputTensor.sub(inputMin).div(inputMax.sub(inputMin));
+    const normalizedLabels = labelTensor.sub(labelMin).div(labelMax.sub(labelMin));
+
+    return {
+      inputs: normalizedInputs,
+      labels: normalizedLabels,
+      inputMax,
+      inputMin,
+      labelMax,
+      labelMin,
+    }
+  })
+}
 ```
+
+This function uses minmax normalization to transform the dataset
+ (`inputTensor.sub(inputMin).div(inputMax.sub(inputMin))`)
+ then returns the prepared tensors.
+
+### Training the model
+
+ ```js
+ async trainModel(model, inputs, labels) {
+   model.compile({
+     optimizer: tf.train.adam(),
+     loss: tf.losses.meanSquaredError,
+     metrics: ['mse'],
+   });
+
+   const batchSize = parseInt(this.state.batchSize);
+   const epochs = parseInt(this.state.epochs);
+
+   return await model.fit(inputs, labels, {
+     batchSize,
+     epochs,
+     shuffle: true,
+     callbacks: tfvis.show.fitCallbacks(
+       { name: 'Training Performance' },
+       ['loss', 'mse'],
+       {
+         height: 200,
+         callbacks: ['onEpochEnd']
+       }
+     )
+   });
+ }
+ ```
+
+ Here, we compile a given model, defining an optimizer, (adam is an algorithm for first-order gradient descent optimization) loss, (mean squared error) and metrics. The batch size and number of epochs are connected to the UI. Finally, the model.fit() method is called to train the model according to all the defined parameters and render it using `tfvis`. (a library for visualization of machine learning operations)
+
+ ### Testing the model
+```js
+ testModel(model, inputData, normalizationData) {
+   const {inputMax, inputMin, labelMin, labelMax} = normalizationData;
+
+   const [xs, preds] = tf.tidy(() => {
+     const xs = tf.linspace(0, 1, 100);
+     const preds = model.predict(xs.reshape([100, 1]));
+
+     const unNormXs = xs.mul(inputMax.sub(inputMin)).add(inputMin);
+     const unNormPreds = preds.mul(labelMax.sub(labelMin)).add(labelMin);
+
+     return [unNormXs.dataSync(), unNormPreds.dataSync()];
+   });
+
+   const predictedPoints = Array.from(xs).map((val, i) => {
+     return {x: val, y: preds[i]}
+   });
+
+   const originalPoints = inputData.map(d => ({
+     x: d.horsepower,
+     y: d.mpg,
+   }));
+
+   tfvis.render.scatterplot(
+     {name: 'Model Predictions vs Original Data'},
+     {values: [originalPoints, predictedPoints], series: ['original', 'predicted']},
+     {
+       xLabel: 'Horsepower',
+       yLabel: 'MPG',
+       height: 300
+     }
+   );
+ }
+ ```
+
+Finally, we generate a linearly defined array of numbers and feed them into the model and use the tfvis scatterplot to see the results of our training.
+
+You can read all the primary source code for the demo [here](https://github.com/malcolmmcswain/ml-models/blob/master/pages/index.js).
